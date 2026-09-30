@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(0.985 0.004 270);
+  --foreground: oklch(0.21 0.03 275);
+  --muted: oklch(0.955 0.008 270);
+  --muted-foreground: oklch(0.47 0.03 275);
+  --card: oklch(1 0 0 / 0.65);
+  --border: oklch(0.21 0.03 275 / 0.10);
+  --primary: oklch(0.55 0.24 285);
+  --primary-2: oklch(0.50 0.23 300);
+  --primary-foreground: oklch(0.99 0 0);
+  --accent-cyan: oklch(0.62 0.14 215);
+  --accent-amber: oklch(0.665 0.16 60);
+  --accent-amber-foreground: oklch(0.21 0.03 275);
+  --accent-pink: oklch(0.62 0.22 350);
+  --accent-emerald: oklch(0.58 0.13 165);
+  --success: oklch(0.54 0.15 150);
+  --destructive: oklch(0.55 0.22 25);
+  --ring: oklch(0.55 0.24 285);
+  --radius: 1rem;
+  --aurora-opacity: 0.35;
+}
+
+.dark {
+  --background: oklch(0.145 0.02 275);
+  --foreground: oklch(0.97 0.005 270);
+  --muted: oklch(0.21 0.025 275);
+  --muted-foreground: oklch(0.72 0.02 270);
+  --card: oklch(0.22 0.03 275 / 0.55);
+  --border: oklch(1 0 0 / 0.10);
+  --primary: oklch(0.68 0.2 285);
+  --primary-2: oklch(0.72 0.17 300);
+  --primary-foreground: oklch(0.14 0.02 275);
+  --accent-cyan: oklch(0.80 0.13 205);
+  --accent-amber: oklch(0.82 0.15 75);
+  --accent-amber-foreground: oklch(0.14 0.02 275);
+  --accent-pink: oklch(0.72 0.19 350);
+  --accent-emerald: oklch(0.70 0.15 165);
+  --success: oklch(0.75 0.15 150);
+  --destructive: oklch(0.70 0.19 25);
+  --ring: oklch(0.68 0.2 285);
+  --aurora-opacity: 0.6;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-foreground: var(--accent-amber-foreground);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-emerald: var(--accent-emerald);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --radius-card: var(--radius);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 30%, transparent);
+  }
+}
+
+@utility glass {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+@utility text-gradient {
+  color: var(--foreground);
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    background-image: linear-gradient(100deg, var(--primary), var(--accent-pink) 55%, var(--accent-amber));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Mobile enrol bar reserve (set by MobileEnrolBar on course pages) */
+@media (max-width: 1023.98px) {
+  body[data-bottom-bar] {
+    padding-bottom: 80px;
+  }
+  body[data-bottom-bar] .floating-enquire {
+    transform: translateY(-80px);
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes aurora {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(24px, -16px, 0) scale(1.06); }
+  100% { transform: translate3d(-16px, 20px, 0) scale(1.1); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes border-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+/* ---------- Auto-running animation inventory (design §4.5) ---------- */
+.animate-aurora {
+  animation: aurora 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+[data-marquee-track]:hover .animate-marquee,
+[data-marquee-track]:focus-within .animate-marquee,
+[data-paused] .animate-marquee {
+  animation-play-state: paused;
+}
+.animate-pulse-3 {
+  animation: pulse-dot 1.2s ease-in-out 3;
+}
+.animate-bob-3 {
+  animation: bob 1.5s ease-in-out 3;
+}
+.animate-border-sweep {
+  position: relative;
+  isolation: isolate;
+}
+.animate-border-sweep::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -50%;
+  background: conic-gradient(from 0deg, transparent 0deg, var(--primary) 60deg, var(--accent-cyan) 120deg, transparent 180deg);
+  animation: border-sweep 1.5s linear 3;
+}
+
+[data-slot="accordion-content"][data-state="open"] {
+  animation: accordion-down 0.25s ease-out;
+}
+[data-slot="accordion-content"][data-state="closed"] {
+  animation: accordion-up 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora,.animate-marquee,.animate-pulse-3,.animate-bob-3,.animate-border-sweep,.animate-border-sweep::before{animation:none!important}html{scroll-behavior:auto}
+  .animate-marquee{animation:none!important;transform:none!important;width:auto!important;flex-wrap:wrap;justify-content:center}[data-marquee-track]{mask-image:none!important}[data-marquee-dup]{display:none!important}
+  [data-slot="accordion-content"]{animation:none!important}
+}
