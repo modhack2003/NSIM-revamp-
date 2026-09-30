@@ -23,12 +23,16 @@ const display = Bricolage_Grotesque({
 const sans = Geist({ subsets: ['latin'], weight: ['400', '500', '600'], display: 'swap', variable: '--font-geist' });
 const mono = Geist_Mono({ subsets: ['latin'], weight: ['500'], display: 'swap', variable: '--font-geist-mono', preload: false });
 
+// basePath is applied automatically to <Link>/asset URLs, but NOT to Metadata
+// `icons` URLs, so prefix those explicitly for subpath deploys (e.g. GitHub Pages).
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: { template: '%s | NSIM Education', default: 'NSIM Education' },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  icons: { icon: '/icon.svg', apple: '/apple-touch-icon.png' },
+  icons: { icon: `${basePath}/icon.svg`, apple: `${basePath}/apple-touch-icon.png` },
   manifest: '/manifest.webmanifest',
 };
 
