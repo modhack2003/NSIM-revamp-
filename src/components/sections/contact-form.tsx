@@ -48,6 +48,17 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
     shouldFocusError: true,
   });
   const message = useWatch({ control, name: 'message' }) ?? '';
+  // Register eagerly in DOM order: render-prop children run later, and RHF focuses the first invalid field by registration order.
+  const fields = {
+    name: register('name'),
+    email: register('email'),
+    phone: register('phone'),
+    course: register('course'),
+    mode: register('mode'),
+    message: register('message'),
+    consent: register('consent'),
+    hp_ref: register('hp_ref'),
+  };
 
   const onCourse = React.useCallback(
     (slug: CourseSlug) => {
@@ -111,20 +122,20 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
         </Suspense>
 
         <FormField id="name" label="Full name" required error={errors.name?.message} className="md:col-span-2">
-          {(c) => <Input {...c} {...register('name')} autoComplete="name" />}
+          {(c) => <Input {...c} {...fields.name} autoComplete="name" />}
         </FormField>
 
         <FormField id="email" label="Email" required error={errors.email?.message}>
-          {(c) => <Input {...c} {...register('email')} type="email" autoComplete="email" inputMode="email" />}
+          {(c) => <Input {...c} {...fields.email} type="email" autoComplete="email" inputMode="email" />}
         </FormField>
 
         <FormField id="phone" label="Mobile number" required error={errors.phone?.message}>
-          {(c) => <Input {...c} {...register('phone')} type="tel" autoComplete="tel" inputMode="tel" placeholder="98765 43210" />}
+          {(c) => <Input {...c} {...fields.phone} type="tel" autoComplete="tel" inputMode="tel" placeholder="98765 43210" />}
         </FormField>
 
         <FormField id="course" label="Program of interest" required error={errors.course?.message} className="md:col-span-2">
           {(c) => (
-            <NativeSelect {...c} {...register('course')}>
+            <NativeSelect {...c} {...fields.course}>
               <option value="">Select a program</option>
               {courseOptions.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -143,7 +154,7 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
                 key={m.value}
                 className="glass inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full px-4 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/10 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
               >
-                <input type="radio" value={m.value} {...register('mode')} className="size-4 accent-primary outline-none" />
+                <input type="radio" value={m.value} {...fields.mode} className="size-4 accent-primary outline-none" />
                 {m.label}
               </label>
             ))}
@@ -159,7 +170,7 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
         >
           {(c) => (
             <div className="relative">
-              <Textarea {...c} {...register('message')} rows={4} placeholder="Your background, goals or questions" />
+              <Textarea {...c} {...fields.message} rows={4} placeholder="Your background, goals or questions" />
               <span
                 aria-live="off"
                 className={cn(
@@ -179,7 +190,7 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
               id="consent"
               aria-invalid={Boolean(errors.consent)}
               aria-describedby={errors.consent ? 'consent-error' : undefined}
-              {...register('consent')}
+              {...fields.consent}
             />
             <label htmlFor="consent" className="text-sm">
               I agree to be contacted by NSIM Education about this enquiry.{' '}
@@ -195,7 +206,7 @@ export function ContactForm({ courseOptions }: { courseOptions: CourseOptionItem
 
         <div aria-hidden="true" className="sr-only">
           <label htmlFor="hp_ref">Leave this field empty</label>
-          <input id="hp_ref" type="text" tabIndex={-1} autoComplete="off" {...register('hp_ref')} />
+          <input id="hp_ref" type="text" tabIndex={-1} autoComplete="off" {...fields.hp_ref} />
         </div>
 
         <p className="sr-only" aria-live="polite" data-testid="form-summary">

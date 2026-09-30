@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { motion, type Variants } from 'motion/react';
+import type { Variants } from 'motion/react';
+import * as m from 'motion/react-m';
 import { revealVariants, revealViewport, staggerVariants } from '@/lib/motion';
 import { useHasIO } from '@/lib/use-mounted';
 
@@ -27,7 +28,7 @@ function useTriggerProps(viewport: RevealProps['viewport']) {
 /** Fade + rise on first view. Adds `data-reveal` so the noscript sheet can force it visible. */
 export function Reveal({ as = 'div', className, children, variants = revealVariants, delay, viewport, id }: RevealProps) {
   const trigger = useTriggerProps(viewport);
-  const Cmp = motion[as];
+  const Cmp = m[as];
   return (
     <Cmp
       data-reveal=""
@@ -44,7 +45,7 @@ export function Reveal({ as = 'div', className, children, variants = revealVaria
 
 export function Stagger({ as = 'div', className, children, viewport, id }: Omit<RevealProps, 'variants' | 'delay'>) {
   const trigger = useTriggerProps(viewport);
-  const Cmp = motion[as];
+  const Cmp = m[as];
   return (
     <Cmp id={id} className={className} variants={staggerVariants} {...trigger}>
       {children}
@@ -53,7 +54,7 @@ export function Stagger({ as = 'div', className, children, viewport, id }: Omit<
 }
 
 export function StaggerItem({ as = 'div', className, children, variants = revealVariants, id }: Omit<RevealProps, 'viewport' | 'delay'>) {
-  const Cmp = motion[as];
+  const Cmp = m[as];
   return (
     <Cmp data-reveal="" id={id} className={className} variants={variants}>
       {children}

@@ -2,12 +2,16 @@
 
 import * as React from 'react';
 import { ThemeProvider } from 'next-themes';
-import { MotionConfig } from 'motion/react';
+import { LazyMotion, MotionConfig } from 'motion/react';
+
+const loadFeatures = () => import('@/lib/motion-features').then((mod) => mod.default);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      <LazyMotion features={loadFeatures} strict>
+        <MotionConfig reducedMotion="user">{children}</MotionConfig>
+      </LazyMotion>
     </ThemeProvider>
   );
 }

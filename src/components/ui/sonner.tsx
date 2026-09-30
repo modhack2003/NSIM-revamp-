@@ -1,7 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
-import { Toaster as Sonner } from 'sonner';
+
+// The toast host renders nothing until a toast fires, so sonner is loaded after hydration
+// to keep it out of every page's first-load bundle (design §11 budget).
+const Sonner = dynamic(() => import('sonner').then((mod) => mod.Toaster), { ssr: false });
 
 export function Toaster() {
   const { resolvedTheme } = useTheme();

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { ArrowRight } from 'lucide-react';
 import { siteConfig } from '@/data/site';
 import { cn, normalizePath } from '@/lib/utils';
@@ -54,7 +54,7 @@ export function Navbar({ courseLinks }: { courseLinks: NavCourseLink[] }) {
               return (
                 <li key={link.href} className="relative">
                   {active ? (
-                    <motion.span
+                    <m.span
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full bg-primary/12 ring-1 ring-primary/25"
                       transition={{ type: 'spring', stiffness: 400, damping: 35 }}

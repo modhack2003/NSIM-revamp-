@@ -1,87 +1,58 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import { ArrowRight, Menu } from 'lucide-react';
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { cn, normalizePath } from '@/lib/utils';
-import { Logo } from './logo';
-import { ThemeToggle } from './theme-toggle';
+import { Menu } from 'lucide-react';
+import { normalizePath } from '@/lib/utils';
 
 interface LinkItem { href: string; label: string }
 
+const loadDrawer = () => import('./mobile-nav-drawer');
+const MobileNavDrawer = dynamic(loadDrawer, { ssr: false });
+
+/**
+ * Drawer trigger (below md). The Radix drawer itself is code-split and prefetched on
+ * hover/focus/touch of the trigger. Every drawer link is wrapped in SheetClose, and `open`
+ * changes only through `onOpenChange` or the trigger (no effect watches the pathname).
+ */
 export function MobileNav({ nav, courseLinks }: { nav: LinkItem[]; courseLinks: LinkItem[] }) {
   const [open, setOpen] = React.useState(false);
+  const [requested, setRequested] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
   const pathname = normalizePath(usePathname() ?? '/');
+  const prefetch = () => void loadDrawer();
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <button
-          type="button"
-          aria-label="Open menu"
-          className="grid size-11 place-items-center rounded-full border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none md:hidden"
-        >
-          <Menu aria-hidden className="size-5" />
-        </button>
-      </SheetTrigger>
-      <SheetContent title="Site menu">
-        <div className="pr-12">
-          <Logo />
-        </div>
-        <nav aria-label="Mobile" className="flex flex-col gap-6">
-          <ul className="flex flex-col gap-1">
-            {nav.map((link) => {
-              const active = pathname === normalizePath(link.href);
-              return (
-                <li key={link.href}>
-                  <SheetClose asChild>
-                    <Link
-                      href={link.href}
-                      aria-current={active ? 'page' : undefined}
-                      className={cn(
-                        'flex min-h-11 items-center rounded-xl px-3 font-display text-2xl font-bold tracking-tight transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-                        active && 'text-primary',
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  </SheetClose>
-                </li>
-              );
-            })}
-          </ul>
-          <div>
-            <p className="eyebrow mb-2 px-3 text-muted-foreground">Programs</p>
-            <ul className="flex flex-col gap-1">
-              {courseLinks.map((link) => (
-                <li key={link.href}>
-                  <SheetClose asChild>
-                    <Link
-                      href={link.href}
-                      className="flex min-h-11 items-center rounded-xl px-3 text-base font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                    >
-                      {link.label}
-                    </Link>
-                  </SheetClose>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-        <div className="mt-auto flex items-center gap-3">
-          <SheetClose asChild>
-            <Button asChild size="lg" className="flex-1">
-              <Link href="/contact/">
-                Enquire now <ArrowRight aria-hidden className="size-4" />
-              </Link>
-            </Button>
-          </SheetClose>
-          <ThemeToggle />
-        </div>
-      </SheetContent>
-    </Sheet>
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-label="Open menu"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls={open ? 'mobile-nav-drawer' : undefined}
+        onPointerEnter={prefetch}
+        onFocus={prefetch}
+        onTouchStart={prefetch}
+        onClick={() => {
+          setRequested(true);
+          setOpen(true);
+        }}
+        className="grid size-11 place-items-center rounded-full border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none md:hidden"
+      >
+        <Menu aria-hidden className="size-5" />
+      </button>
+      {requested ? (
+        <MobileNavDrawer
+          open={open}
+          onOpenChange={setOpen}
+          nav={nav}
+          courseLinks={courseLinks}
+          activePath={pathname}
+          triggerRef={triggerRef}
+        />
+      ) : null}
+    </>
   );
 }

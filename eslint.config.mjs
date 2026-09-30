@@ -3,7 +3,7 @@ import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 
 const CLIENT_FILES = [
-  'src/components/layout/{navbar,mobile-nav,floating-enquire,theme-toggle,providers}.tsx',
+  'src/components/layout/{navbar,mobile-nav,mobile-nav-drawer,floating-enquire,theme-toggle,providers}.tsx',
   'src/components/sections/{contact-form,course-param-sync,mobile-enrol-bar,tools-marquee,testimonials-carousel,course-card,rotating-words,animated-counter,reveal}.tsx',
   'src/components/ui/{accordion,sonner}.tsx',
 ];
