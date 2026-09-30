@@ -9,6 +9,17 @@ A static marketing site for NSIM Education (Kolkata). It covers three live onlin
 - `motion` (loaded via `LazyMotion`), `next-themes`, `embla-carousel-react`, `react-hook-form` + `zod` 4, `sonner`, `lucide-react`
 - Vitest + Testing Library; `scripts/verify-export.mjs` checks the static export
 
+## Install and run
+
+Requires Node 22 and pnpm.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm dev          # http://localhost:3000
+pnpm build        # static export to out/
+pnpm start        # serve out/
+```
+
 ## Scripts
 
 | Command | What it does |
@@ -51,3 +62,19 @@ Every unknown fact is a placeholder. In `src/data/**` each one sits on a line en
 | Lighthouse 13 mobile `/` and `/courses/ai-digital-marketing/` | Perf 92 / A11y 100 / BP 100 / SEO 100 on both, measured against local `serve` with Playwright Chromium |
 
 See `.agents/tasks/verification.md` for the commands and results of each iteration.
+
+## Screenshots
+
+- **Committed:** `screenshots/*.png`. These are 48 full-page captures (8 pages × 1440/768/375 × dark/light) plus the interaction captures.
+- **Gitignored:** `screenshots/review-tiles/`. The tiles are derived from the captures and can be regenerated, so they are not committed.
+
+To regenerate:
+
+1. Run `pnpm build`.
+2. Serve the export with `npx serve out -l 4173`.
+3. Capture every page with Playwright (Chromium, `fullPage: true`) at each viewport and theme. Save each capture to `screenshots/<page>-<width>-<theme>.png`.
+4. Stop the server.
+
+The capture scripts (`run.sh`, `shoot.mjs`, `interact.mjs`) live outside this repo, in `/projects/sandbox/nsim-tools`. `sh run.sh shoot.mjs` starts the server, captures, and always stops the server.
+
+To tile the captures, slice each one into 1800px-high strips at full width with Pillow. Save the strips as `screenshots/review-tiles/<name>-partN.png` (N starts at 1). Every tile is under 2000px on both sides, so the tiles are safe to inspect.

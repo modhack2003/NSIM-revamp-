@@ -1,5 +1,13 @@
 # Content handover checklist
 
+## Content sources
+
+- All site content lives in `src/data/**`: `site.ts` (contact, social, legal, URL), `home.ts` (hero, stats, bento), `courses.ts` (single source for the three programs), `about.ts` (mentors), `testimonials.ts`, `faqs.ts`, `tools.ts`.
+- The live site (nsimeducation.com) was not fetched. All copy is original, and no text is copied from it.
+- Any fact that could not be confirmed is a placeholder, listed below. NSIM should supply the real values.
+
+## Placeholders
+
 Every value below is a placeholder. In the code, each one sits on a line in `src/data/**` that ends with `// PLACEHOLDER P-xx`. Replace the value, keep or remove the comment, and tick the box. `src/test/placeholders.test.ts` keeps this list, the data files and the register in sync.
 
 | Done | ID | Item | Placeholder value | File |
