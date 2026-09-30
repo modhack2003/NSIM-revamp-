@@ -14,10 +14,8 @@ export function Footer() {
     <footer className="relative isolate mt-12 overflow-clip border-t border-border">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 flex translate-y-[18%] justify-center font-display text-[28vw] leading-none font-extrabold tracking-tighter text-foreground/[0.035] select-none"
-      >
-        NSIM
-      </div>
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 flex translate-y-[18%] justify-center font-display text-[28vw] leading-none font-extrabold tracking-tighter text-foreground/[0.035] select-none before:content-['NSIM']"
+      />
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_2fr_1.2fr] lg:py-20">
         <div className="flex flex-col gap-5">
           <Link href="/" className="w-fit rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">

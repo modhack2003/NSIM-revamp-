@@ -86,3 +86,89 @@ Servers: every `serve` process was started and killed inside `run.sh`. `ps` show
   - The verifier excludes `noModule` polyfill scripts from the budget.
 - **`seo.test.tsx`** uses a `.tsx` extension because it renders `<JsonLd>`.
 - **Contact course options** use `shortTitle` labels (AC3).
+
+---
+
+# Verification — iteration 2 (review.json: CHANGES_REQUESTED, 2 MEDIUM + 5 LOW)
+
+## Code fixes
+
+| Finding | Fix |
+|---|---|
+| LOW: Enquire covers marquee Pause at 375 | `tools-marquee.tsx`: the header row gets `max-md:flex-row-reverse`, so below md the Pause button sits on the left, away from the bottom-right bubble. Desktop is unchanged. Confirmed in `home-375-*-part1`. |
+| LOW: Enquire lift persists when enrol bar hidden | `mobile-enrol-bar.tsx` also sets `body[data-bottom-bar-hidden]` while the bar is hidden (IO on `#enrol`). `globals.css` lift selector is now `body[data-bottom-bar]:not([data-bottom-bar-hidden]) .floating-enquire`. The 80px body padding stays reserved so the page does not jump on scroll. |
+| LOW: Toast fallback font | `ui/sonner.tsx`: `style` and `toastOptions.style` set `fontFamily: var(--font-sans)`, which is Geist. Confirmed in `interaction-contact-success-1440`. |
+| LOW: Bento (c) darker than siblings | Inner panel is `bg-background` plus `bg-[linear-gradient(var(--card),var(--card))]`, which is `--card` composited opaque over the background. Confirmed in `home-1440-dark-part2`. |
+| Found by Lighthouse (new) | The logo's "Education" span was 3.98:1 over the light-theme aurora on course pages. It is now `text-foreground/85 dark:text-muted-foreground`, matching iteration 1's sub-copy precedent. |
+| Found by Lighthouse (new) | axe flagged the `aria-hidden` footer "NSIM" watermark (text at 3.5% opacity). The text now comes from `before:content-['NSIM']`, so it looks the same but axe no longer sees text there. |
+
+## Gate commands (run from `/projects/sandbox/nsim-remastered`, after the last code change)
+
+| Command | Result |
+|---|---|
+| `npm run typecheck` | exit 0, 0 errors |
+| `npm run lint` | exit 0, 0 problems |
+| `npm test` | 15 files, 88 tests, all pass |
+| `npm run build` | exit 0. The build log has 0 lines matching error or warn |
+| `npm run verify` | 95 passed, 0 failed. Home first-load JS is 199.0 kB gzipped (≤ 200 kB) |
+
+## Screenshots: MEDIUM findings 1 and 2
+
+`/projects/sandbox/nsim-tools/shoot.mjs` changes:
+- Now covers 8 pages: home, courses, all 3 course pages, contact, about and 404 (`/this-page-does-not-exist/`).
+- Widths are 1440, 768 and 375.
+- Light-theme captures now cover every page, not just home.
+
+Command: `sh run.sh shoot.mjs > shoot-out.json`
+
+Results:
+- **48 captures.** On every one, `scrollWidth` equals the viewport (1440, 768 or 375), with 0 overflow offenders and 0 page or console errors.
+- **404 captures.** The only console message is the expected "Failed to load resource: 404" for the document itself.
+
+Tiles were regenerated with the prescribed Pillow script: 193 files in `screenshots/review-tiles/`.
+
+Tiles I viewed:
+- `home-375-dark-part1`: Pause is on the left, clear of the bubble.
+- `home-1440-dark-part1` and `-part2`: the bento (c) tile matches its neighbours.
+- `about-1440-dark-part1` and `-part2`: story, values, stats, approach and mentors render with no clipping.
+- `404-1440-light-part1`: fine, and the watermark still renders.
+- `course-ai-prompt-engineering-1440-light-part1`: amber theme, fine.
+- `course-business-accounting-finance-768-light-part1`: 768 layout collapses to one column cleanly.
+- `interaction-contact-success-1440-part1`: toast is in Geist.
+
+No new layout issues. As before, the fixed MobileEnrolBar appears mid-page in full-page captures. That is a Playwright full-page artifact.
+
+## Interactions
+
+Command: `sh run.sh interact.mjs`. Result: 17/17 PASS, the same checks as iteration 1.
+
+## LOW finding 3: reduced motion, keyboard, Lighthouse
+
+New script `/projects/sandbox/nsim-tools/a11y.mjs`. Command: `sh run.sh a11y.mjs > a11y-out.json`.
+
+**Reduced motion** (Playwright `reducedMotion: 'reduce'`, scroll-through):
+- 7/7 pages pass.
+- 0 running infinite or >1s animations and 0 `[data-reveal]` at opacity 0.
+- The Pause button is hidden on home.
+- The first run without scroll-through reported below-fold reveals at opacity 0. That was a probe artifact: they reveal on scroll with an opacity-only fade.
+- A real OS-level toggle is environment-blocked. Emulation was used instead.
+
+**Keyboard Tab walk:**
+- 7/7 pages pass: `/` 42 stops, `/courses/` 28, the course pages 39, 39 and 38, `/about/` 21, `/contact/` 32.
+- The first stop is "Skip to content" on every page.
+- Every stop is visible and has a focus indicator on itself or its card (course cards use `has-[a:focus-visible]:ring`).
+
+**Lighthouse 13.5** (mobile default, installed in nsim-tools, Playwright Chromium, local `serve`):
+
+| Page | Perf | A11y | BP | SEO | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|
+| `/` | 92 | 100 | 100 | 100 | 3.3 s | 0.039 | 100 ms |
+| `/courses/ai-digital-marketing/` | 92 | 100 | 100 | 100 | 3.3 s | 0 | 70 ms |
+
+Before the two contrast fixes, the course page scored A11y 96 (color-contrast).
+
+README's manual checklist is updated with these results.
+
+## Servers
+
+`serve` and Chromium were started and killed inside `run.sh` (EXIT trap). A final `ps -eo args | grep -E "[s]erve |[c]hrome"` finds 0 processes.

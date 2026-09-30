@@ -22,7 +22,7 @@ export function Logo({ className }: { className?: string }) {
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <LogoMark />
       <span className="font-display text-lg leading-none font-extrabold tracking-tight">
-        NSIM<span className="font-semibold text-muted-foreground"> Education</span>
+        NSIM<span className="font-semibold text-foreground/85 dark:text-muted-foreground"> Education</span>
       </span>
     </span>
   );

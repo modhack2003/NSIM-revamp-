@@ -129,7 +129,7 @@
   body[data-bottom-bar] {
     padding-bottom: 80px;
   }
-  body[data-bottom-bar] .floating-enquire {
+  body[data-bottom-bar]:not([data-bottom-bar-hidden]) .floating-enquire {
     transform: translateY(-80px);
   }
 }

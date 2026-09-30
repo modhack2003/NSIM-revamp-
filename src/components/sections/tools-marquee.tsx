@@ -35,7 +35,8 @@ export function ToolsMarquee({ tools }: { tools: Tool[] }) {
       <h2 id="tools-heading" className="sr-only">
         Tools you&apos;ll master
       </h2>
-      <Container className="mb-6 flex items-center justify-between gap-4">
+      {/* Below md the Pause control sits on the left so the fixed Enquire bubble (bottom-right) can't cover it. */}
+      <Container className="mb-6 flex items-center justify-between gap-4 max-md:flex-row-reverse">
         <p className="eyebrow text-muted-foreground">Hands-on with the tools employers use</p>
         <button
           type="button"

@@ -16,6 +16,8 @@ export function Toaster() {
       offset={88}
       richColors
       closeButton
+      style={{ fontFamily: 'var(--font-sans)' }}
+      toastOptions={{ style: { fontFamily: 'var(--font-sans)' } }}
     />
   );
 }

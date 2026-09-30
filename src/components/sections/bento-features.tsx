@@ -63,7 +63,7 @@ function FeatureTile({ f }: { f: BentoFeature }) {
   if (f.id === 'ai') {
     return (
       <div className="animate-border-sweep h-full overflow-hidden rounded-3xl p-px">
-        <div className="h-full rounded-[calc(1.5rem-1px)] bg-background p-6 md:p-8">{body}</div>
+        <div className="h-full rounded-[calc(1.5rem-1px)] bg-background bg-[linear-gradient(var(--card),var(--card))] p-6 md:p-8">{body}</div>
       </div>
     );
   }

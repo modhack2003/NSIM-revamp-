@@ -42,12 +42,12 @@ Every unknown fact is a placeholder. In `src/data/**` each one sits on a line en
 
 | Check | Result |
 |---|---|
-| No horizontal overflow at 375 / 1440 (both themes on home) | Pass (Playwright, iteration 1: scrollWidth = viewport on all 10 captures) |
-| No horizontal overflow at 320 / 768 / 1920 | Not yet recorded |
-| Keyboard-only pass on all 6 pages | Partial: drawer focus trap/restore and form error focus verified in Playwright |
-| OS reduced-motion pass | Not yet recorded (CSS rules unit-tested in `motion-inventory.test.ts`) |
+| No horizontal overflow at 375 / 768 / 1440, both themes, all 8 pages incl. 404 | Pass (Playwright, iteration 2: scrollWidth = viewport on all 48 captures) |
+| No horizontal overflow at 320 / 1920 | Not recorded (not in AC7) |
+| Keyboard-only pass on all pages | Pass (Playwright Tab walk on 7 pages: skip link first, every stop visible with a focus ring on itself or its card) |
+| Reduced-motion pass (`reducedMotion: 'reduce'` emulation) | Pass on 7 pages: no infinite or >1s animations running, no reveal stuck at opacity 0, marquee Pause hidden. A physical OS toggle was not available |
 | JS-disabled pass | Pass for home: no `[data-reveal]` stuck at opacity 0, JS-only controls hidden |
-| Hero / glass-card contrast over aurora (colour picker) | Visually checked in screenshots, not yet measured |
-| Lighthouse mobile `/` and `/courses/ai-digital-marketing/` | Not yet run (no Lighthouse in this environment) |
+| Contrast over aurora | Lighthouse/axe color-contrast passes on `/` and `/courses/ai-digital-marketing/` (light) |
+| Lighthouse 13 mobile `/` and `/courses/ai-digital-marketing/` | Perf 92 / A11y 100 / BP 100 / SEO 100 on both, measured against local `serve` with Playwright Chromium |
 
 See `.agents/tasks/verification.md` for the commands and results of each iteration.

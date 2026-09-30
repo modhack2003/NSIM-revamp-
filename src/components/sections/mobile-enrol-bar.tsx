@@ -28,6 +28,15 @@ export function MobileEnrolBar({ feeLabel, href }: { feeLabel: string; href: `/c
     };
   }, []);
 
+  // The body padding stays reserved (no scroll jump); only the Enquire lift follows the bar.
+  React.useEffect(() => {
+    if (hidden) document.body.dataset.bottomBarHidden = 'true';
+    else delete document.body.dataset.bottomBarHidden;
+    return () => {
+      delete document.body.dataset.bottomBarHidden;
+    };
+  }, [hidden]);
+
   if (!mounted) return null;
 
   return createPortal(
