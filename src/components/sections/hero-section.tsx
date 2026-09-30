@@ -21,7 +21,7 @@ export function HeroSection() {
   const [learners, rating] = pickStats(['learners', 'rating']);
   return (
     <section className="relative isolate overflow-clip pt-10 pb-20 md:pt-16 lg:flex lg:min-h-[92svh] lg:items-center lg:pb-28">
-      <AuroraBackground />
+      <AuroraBackground fade className="max-lg:opacity-60" />
       <GridPattern />
       <Container className="grid items-center gap-12 lg:grid-cols-[1.25fr_1fr]">
         <div className="flex flex-col items-start gap-7">
@@ -34,7 +34,7 @@ export function HeroSection() {
             <span className="sr-only">AI digital marketing, prompt engineering and accounting</span>
             <RotatingWords aria-hidden words={hero.rotatingWords} className="max-w-full" />
           </h1>
-          <p className="max-w-[58ch] text-lg text-muted-foreground md:text-xl">{hero.sub}</p>
+          <p className="max-w-[58ch] text-lg text-foreground/85 md:text-xl">{hero.sub}</p>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <Button asChild size="lg">
               <Link href={hero.primaryCta.href}>
@@ -60,7 +60,7 @@ export function HeroSection() {
               <p className="font-semibold">
                 Trusted by {formatCounter(learners.value, learners.decimals, learners.prefix, learners.suffix)} learners
               </p>
-              <p className="flex items-center gap-1.5 text-muted-foreground">
+              <p className="flex items-center gap-1.5 text-foreground/85">
                 <span className="flex text-accent-amber" aria-hidden="true">
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star key={i} className="size-3.5 fill-current" />

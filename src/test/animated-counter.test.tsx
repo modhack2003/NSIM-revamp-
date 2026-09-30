@@ -20,8 +20,9 @@ describe('AnimatedCounter', () => {
     expect(sr.textContent).toBe('5,000+ learners trained');
   });
 
-  it('formats decimals', () => {
+  it('formats decimals and draws the ★ suffix as an aria-hidden icon', () => {
     const { container } = render(<AnimatedCounter value={4.8} decimals={1} suffix="★" srLabel="4.8 out of 5" />);
-    expect(container.querySelector('[data-counter]')!.textContent).toBe('4.8★');
+    expect(container.querySelector('[data-counter]')!.textContent).toBe('4.8');
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
   });
 });

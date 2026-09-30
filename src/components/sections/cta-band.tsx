@@ -18,7 +18,7 @@ export function CtaBand() {
           >
             {ctaBand.heading}
           </h2>
-          <p className="mx-auto mt-5 max-w-[60ch] text-lg text-muted-foreground">{ctaBand.sub}</p>
+          <p className="mx-auto mt-5 max-w-[60ch] text-lg text-foreground/85">{ctaBand.sub}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link href="/contact/">

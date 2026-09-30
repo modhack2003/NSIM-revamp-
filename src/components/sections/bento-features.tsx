@@ -42,7 +42,7 @@ function LiveMock() {
 function ProjectsMock() {
   return (
     <div aria-hidden="true" className="mt-6 grid grid-cols-3 gap-2">
-      {['bg-primary/30', 'bg-accent-cyan/30', 'bg-accent-amber/30', 'bg-accent-pink/30', 'bg-accent-emerald/30', 'bg-primary-2/30'].map((c, i) => (
+      {['bg-primary/30', 'bg-accent-cyan/30', 'bg-accent-amber/30', 'bg-accent-pink/30', 'bg-accent-emerald/30'].map((c, i) => (
         <div key={c} className={cn('h-14 rounded-xl border border-border', c, i === 1 && 'row-span-2 h-auto')} />
       ))}
     </div>
@@ -63,7 +63,7 @@ function FeatureTile({ f }: { f: BentoFeature }) {
   if (f.id === 'ai') {
     return (
       <div className="animate-border-sweep h-full overflow-hidden rounded-3xl p-px">
-        <div className="h-full rounded-[calc(1.5rem-1px)] bg-background/95 p-6 md:p-8">{body}</div>
+        <div className="h-full rounded-[calc(1.5rem-1px)] bg-background p-6 md:p-8">{body}</div>
       </div>
     );
   }

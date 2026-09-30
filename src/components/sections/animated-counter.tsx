@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useInView, useReducedMotion } from 'motion/react';
+import { Star } from 'lucide-react';
 import { cn, formatCounter } from '@/lib/utils';
 
 const DURATION_MS = 1600;
@@ -43,21 +44,25 @@ export function AnimatedCounter({
   const numRef = React.useRef<HTMLSpanElement>(null);
   const inView = useInView(numRef, { once: true, margin: '-10% 0px' });
   const reduce = useReducedMotion();
-  const final = formatCounter(value, decimals, prefix, suffix);
+  // '★' is drawn as an icon: many system font stacks lack the glyph and would show tofu.
+  const starSuffix = suffix === '★';
+  const textSuffix = starSuffix ? '' : suffix;
+  const final = formatCounter(value, decimals, prefix, textSuffix);
 
   React.useEffect(() => {
     if (!inView || reduce) return;
     const controls = tween(0, value, (v) => {
-      if (numRef.current) numRef.current.textContent = formatCounter(v, decimals, prefix, suffix);
+      if (numRef.current) numRef.current.textContent = formatCounter(v, decimals, prefix, textSuffix);
     });
     return () => controls.stop();
-  }, [inView, reduce, value, decimals, prefix, suffix]);
+  }, [inView, reduce, value, decimals, prefix, textSuffix]);
 
   return (
-    <span className={cn('inline-block', className)}>
-      <span ref={numRef} aria-hidden="true" className="inline-block min-w-[4ch] tabular-nums" data-counter>
+    <span className={cn('inline-flex items-baseline justify-center whitespace-nowrap', className)}>
+      <span ref={numRef} aria-hidden="true" className="inline-block tabular-nums" data-counter>
         {final}
       </span>
+      {starSuffix ? <Star aria-hidden className="ml-1 size-[0.7em] shrink-0 self-center fill-accent-amber text-accent-amber" /> : null}
       <span className="sr-only">{srLabel}</span>
     </span>
   );

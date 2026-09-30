@@ -23,15 +23,22 @@ const POSITIONS = [
 export function AuroraBackground({
   theme,
   blobs = 4,
+  fade = false,
   className,
 }: {
   theme?: CourseTheme;
   blobs?: 3 | 4;
+  /** Fade the bottom edge so the aurora dissolves into the page instead of ending in a hard line. */
+  fade?: boolean;
   className?: string;
 }) {
   const colours = BLOB_SETS[theme ?? 'default'];
   return (
-    <div aria-hidden className={cn('pointer-events-none absolute inset-0 -z-10 overflow-hidden', className)}>
+    <div aria-hidden className={cn(
+        'pointer-events-none absolute inset-0 -z-10 overflow-hidden',
+        fade && '[mask-image:linear-gradient(to_bottom,#000_55%,transparent)]',
+        className,
+      )}>
       {POSITIONS.slice(0, blobs).map((pos, i) => (
         <div
           key={pos}

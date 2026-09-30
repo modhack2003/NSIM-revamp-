@@ -21,7 +21,7 @@ export function CourseHero({ course, syllabusNote }: { course: Course; syllabusN
   ];
   return (
     <section className="relative isolate pt-10 pb-16 md:pt-14 md:pb-24">
-      <AuroraBackground theme={course.theme} />
+      <AuroraBackground theme={course.theme} fade className="max-lg:opacity-60" />
       <GridPattern />
       <Container className="flex flex-col gap-6">
         <Breadcrumbs
@@ -41,7 +41,7 @@ export function CourseHero({ course, syllabusNote }: { course: Course; syllabusN
         <h1 className="max-w-4xl text-[clamp(2.5rem,5vw+1rem,4.75rem)] leading-[0.98] font-extrabold tracking-[-0.03em]">
           {course.title}
         </h1>
-        <p className="max-w-[60ch] text-lg text-muted-foreground md:text-xl">{course.tagline}</p>
+        <p className="max-w-[60ch] text-lg text-foreground/85 md:text-xl">{course.tagline}</p>
         <ul className="flex flex-wrap gap-3">
           {meta.map((m) => (
             <li key={m.label} className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm">
@@ -61,7 +61,7 @@ export function CourseHero({ course, syllabusNote }: { course: Course; syllabusN
             <Link href={`/contact/?course=${course.slug}`}>Talk to a counsellor</Link>
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">{syllabusNote}</p>
+        <p className="text-sm text-foreground/75">{syllabusNote}</p>
       </Container>
     </section>
   );
