@@ -35,19 +35,19 @@ export function ToolsMarquee({ tools }: { tools: Tool[] }) {
       <h2 id="tools-heading" className="sr-only">
         Tools you&apos;ll master
       </h2>
-      {/* Below md the Pause control sits on the left so the fixed Enquire bubble (bottom-right) can't cover it. */}
-      <Container className="mb-6 flex items-center justify-between gap-4 max-md:flex-row-reverse">
-        <p className="eyebrow text-muted-foreground">Hands-on with the tools employers use</p>
+      {/* Below md the Pause control sits on the left so the fixed Enquire bubble (bottom-right) can't cover it; DOM order matches visual order. */}
+      <Container className="mb-6 flex items-center justify-between gap-4">
         <button
           type="button"
           data-reveal-js-only
           aria-pressed={paused}
           aria-label={paused ? 'Play tool ticker' : 'Pause tool ticker'}
           onClick={() => setPaused((p) => !p)}
-          className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none motion-reduce:hidden"
+          className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none motion-reduce:hidden md:order-last"
         >
           {paused ? <Play aria-hidden className="size-4" /> : <Pause aria-hidden className="size-4" />}
         </button>
+        <p className="eyebrow text-muted-foreground">Hands-on with the tools employers use</p>
       </Container>
       <div data-paused={paused || undefined} className="flex flex-col gap-3">
         <MarqueeRow items={row1} />

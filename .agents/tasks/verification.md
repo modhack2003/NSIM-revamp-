@@ -172,3 +172,48 @@ README's manual checklist is updated with these results.
 ## Servers
 
 `serve` and Chromium were started and killed inside `run.sh` (EXIT trap). A final `ps -eo args | grep -E "[s]erve |[c]hrome"` finds 0 processes.
+
+---
+
+# Verification: iteration 3 (review.json: CHANGES_REQUESTED, 1 MEDIUM + 3 LOW)
+
+## Code fixes
+
+| Finding | Fix |
+|---|---|
+| MEDIUM: 404 sub-copy contrast over aurora | `not-found.tsx`: the sub-copy changes from `text-muted-foreground` to `text-foreground/85`, as in the other headers (§4.5, NFR2). |
+| LOW: 404 aurora hard edge | `not-found.tsx`: `<AuroraBackground blobs={3} fade className="max-lg:opacity-60" />`, matching PageHeader. |
+| LOW: Marquee Pause visual order differs from DOM order | `tools-marquee.tsx`: `max-md:flex-row-reverse` is removed. The Pause button now comes first in the DOM and carries `md:order-last`. Mobile layout is the same (Pause on the left), and DOM, reading and tab order now match it. Desktop still puts Pause on the right (`md:order-last{order:9999}` is in the built CSS). |
+| LOW: Courses grid orphan at 768 | `courses/page.tsx`: each `<li>` gets `md:max-lg:odd:last:col-span-2`, so at md only, a lone last card spans both columns. lg stays at 3 columns and mobile at 1. Compiled rule: `…:nth-child(odd):last-child{grid-column:span 2/span 2}` inside the md–lg range. |
+
+## Gate commands (from `/projects/sandbox/nsim-remastered`, after the last code change)
+
+| Command | Result |
+|---|---|
+| `npm run typecheck` | exit 0 |
+| `npm run lint` | exit 0, 0 problems |
+| `npm test` | 15 files, 88 tests, all pass |
+| `npm run build` | exit 0, 0 lines matching error/warn in the log |
+| `npm run verify` | 95 passed, 0 failed. Home first-load JS 199.0 kB gzipped (≤ 200 kB) |
+
+## Screenshots and interactions
+
+Environment changes this run:
+- `npx` was not on PATH, so I prefixed PATH with `/opt/toolchains/.nvm/versions/node/v22.23.3/bin`.
+- The installed Playwright 1.63 needs headless shell build 1243, but only 1232 was in `/opt/playwright`. I ran `PLAYWRIGHT_BROWSERS_PATH=/projects/sandbox/nsim-tools/.pw-browsers npx playwright install chromium-headless-shell`. This is outside the repo.
+- The system python3 no longer has Pillow. I ran the prescribed tiling script unchanged via `uv run --no-project --with 'pillow>=11,<12' python -`, which used Pillow 11.3.0.
+
+Commands, run in `/projects/sandbox/nsim-tools`:
+- `sh run.sh shoot.mjs > shoot-out.json`: exit 0. 48 captures (8 pages × 1440/768/375 × dark/light). `sw == vw` on all 48, with 0 overflow offenders. The only console errors are the expected "Failed to load resource: 404" on the six 404 captures.
+- `sh run.sh interact.mjs`: 17/17 PASS, including "marquee pause button stops rows".
+- Tiling script: 193 tiles in `screenshots/review-tiles/`.
+
+Tiles viewed:
+- `404-375-dark-part1`: sub-copy is clearly legible, and the aurora fades out before the footer with no hard edge.
+- `404-1440-dark-part1`: sub-copy is legible over the magenta blob, and the fade is smooth.
+- `courses-768-light-part1`: the Prompt Engineering card spans both columns, so there is no orphan cell.
+- `home-375-dark-part1`: Pause is on the left, clear of the Enquire bubble, with the eyebrow text to its right.
+
+## Servers
+
+`serve` and Chromium were started and killed inside `run.sh` (EXIT trap). A final `pgrep -af "serve /projects|chrome-headless"` finds 0 processes.

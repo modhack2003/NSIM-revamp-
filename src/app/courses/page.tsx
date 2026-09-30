@@ -27,7 +27,7 @@ export default function CoursesPage() {
         <Container>
           <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {courses.map((c) => (
-              <li key={c.slug}>
+              <li key={c.slug} className="md:max-lg:odd:last:col-span-2">
                 <CourseCard course={toCardData(c)} variant="detailed" headingLevel="h2" />
               </li>
             ))}
